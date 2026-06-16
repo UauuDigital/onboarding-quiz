@@ -66,22 +66,22 @@ const STEPS = [
             {
                 value: 'romantic',
                 label: { ca: 'Romàntic i íntim',      es: 'Romántico e íntimo',       en: 'Romantic and intimate'    },
-                img: 'media/romantic.jpg',
+                img: 'https://uauu.cat/media/onboarding/romantic.webp',
             },
             {
                 value: 'festiu',
                 label: { ca: 'Festiu i divertit',     es: 'Festivo y divertido',      en: 'Festive and fun'          },
-                img: 'media/festiu.jpg',
+                img: 'https://uauu.cat/media/onboarding/festiu.webp',
             },
             {
                 value: 'elegant',
                 label: { ca: 'Elegant i sofisticat',  es: 'Elegante y sofisticado',   en: 'Elegant and sophisticated' },
-                img: 'media/elegant.jpg',
+                img: 'https://uauu.cat/media/onboarding/elegant.webp',
             },
             {
                 value: 'petfriendly',
                 label: { ca: 'Pet friendly',          es: 'Pet friendly',             en: 'Pet friendly'             },
-                img: 'media/petfriendly.jpg',
+                img: 'https://uauu.cat/media/onboarding/petfriendly.webp',
             },
         ],
     },
@@ -131,18 +131,18 @@ const STEPS = [
                 value: 'all-in-one',
                 bg: 'dark',
                 text: {
-                    ca: 'Un sol equip<br>que ho gestiona<br>tot.',
-                    es: 'Un solo equipo<br>que lo gestiona<br>todo.',
-                    en: 'One team<br>that manages<br>everything.',
+                    ca: 'Ho volem tot resolt. Tot inclòs, un sol equip que ens acompanyi en tot el procés.',
+                    es: 'Lo queremos todo resuelto. Todo incluido, un solo equipo que nos acompañe en todo el proceso.',
+                    en: 'We want everything sorted. All-inclusive, one team to guide us through the whole process.',
                 },
             },
             {
                 value: 'separate',
                 bg: 'light',
                 text: {
-                    ca: 'Llogar la finca,<br>contractar el càtering,<br>definir el menú i les begudes,<br>escollir la decoració i les flors,<br>contractar la música i el DJ,<br>organitzar la cerimònia,<br>gestionar els horaris<br>i la coordinació del dia,<br>preparar un pla B en cas de mal temps.',
-                    es: 'Alquilar la finca,<br>contratar el catering,<br>definir el menú y las bebidas,<br>elegir la decoración y las flores,<br>contratar la música y el DJ,<br>organizar la ceremonia,<br>gestionar los horarios<br>y la coordinación del día,<br>preparar un plan B en caso de mal tiempo.',
-                    en: 'Renting the venue,<br>hiring the catering,<br>defining the menu and drinks,<br>choosing the decoration and flowers,<br>hiring the music and DJ,<br>organising the ceremony,<br>managing the schedules<br>and day coordination,<br>preparing a plan B in case of bad weather.',
+                    ca: 'Preferim buscar la finca, negociar el preu, contractar el càtering, triar el menú, coordinar els proveïdors, gestionar els horaris del dia, buscar DJ, floristeria, fotògraf, organitzar la cerimònia, preparar el pla B per si plou, resoldre imprevistos el dia de la boda.',
+                    es: 'Preferimos buscar la finca, negociar el precio, contratar el catering, elegir el menú, coordinar los proveedores, gestionar los horarios del día, buscar DJ, floristería, fotógrafo, organizar la ceremonia, preparar el plan B por si llueve, resolver imprevistos el día de la boda.',
+                    en: 'We prefer to find the venue, negotiate the price, hire the catering, choose the menu, coordinate suppliers, manage the day\'s schedule, find a DJ, florist, photographer, organise the ceremony, prepare a plan B in case of rain, and handle unexpected issues on the day.',
                 },
             },
         ],
@@ -157,10 +157,10 @@ const STEPS = [
             en: 'What do you “match” with?',
         },
         cards: [
-            { id: 'banquet',     label: { ca: 'Banquet exterior',  es: 'Banquete exterior',   en: 'Outdoor banquet' }, img: 'media/swipe/banquet_exterior.jpg' },
-            { id: 'allotjament', label: { ca: 'Allotjament',       es: 'Alojamiento',          en: 'Accommodation'   }, img: 'media/swipe/allotjament.jpg'      },
-            { id: 'cerimonia',   label: { ca: 'Cerimònia',         es: 'Ceremonia',            en: 'Ceremony'        }, img: 'media/swipe/cerimonia.jpg'        },
-            { id: 'musica',      label: { ca: 'Música en directe', es: 'Música en directo',    en: 'Live music'      }, img: 'media/swipe/musica_directe.jpg'   },
+            { id: 'banquet',     label: { ca: 'Banquet exterior',  es: 'Banquete exterior',   en: 'Outdoor banquet' }, img: 'https://uauu.cat/media/onboarding/swipe/banquet_exterior.webp' },
+            { id: 'allotjament', label: { ca: 'Allotjament',       es: 'Alojamiento',          en: 'Accommodation'   }, img: 'https://uauu.cat/media/onboarding/swipe/allotjament.webp'      },
+            { id: 'cerimonia',   label: { ca: 'Cerimònia',         es: 'Ceremonia',            en: 'Ceremony'        }, img: 'https://uauu.cat/media/onboarding/swipe/cerimonia.webp'        },
+            { id: 'musica',      label: { ca: 'Música en directe', es: 'Música en directo',    en: 'Live music'      }, img: 'https://uauu.cat/media/onboarding/swipe/musica_directe.webp'   },
         ],
     },
 
@@ -261,7 +261,23 @@ const Quiz = {
         document.addEventListener('keydown', e => this.handleKey(e));
 
         this.renderAll();
+        this._fromHistory   = false;
+        this._historyReady  = false;
+        history.replaceState({ quizSlide: 0 }, '');
         this.showSlide(0);
+        this._historyReady = true;
+
+        window.addEventListener('popstate', (e) => {
+            const slide = e.state?.quizSlide;
+            if (typeof slide === 'number') {
+                this._fromHistory = true;
+                this.showSlide(slide);
+                this._fromHistory = false;
+            } else {
+                // No quiz state — push current slide back to prevent leaving
+                history.pushState({ quizSlide: this.current }, '');
+            }
+        });
     },
 
     // ── i18n ──────────────────────────────────────────────────
@@ -686,7 +702,6 @@ const Quiz = {
                         class="quiz-input"
                         type="tel"
                         id="cs-phone-${step.id}"
-                        placeholder="${this.t(TEXTS.phPhoneSimple)}"
                         autocomplete="tel"
                         oninput="document.getElementById('cs-err-${step.id}')?.classList.remove('visible')"
                         onkeydown="if(event.key==='Enter') Quiz.submitSimpleContact('${step.id}')"
@@ -734,10 +749,7 @@ const Quiz = {
                     </div>
                     <div class="contact-field" id="field-phone_mobile">
                         <label for="c-phone_mobile">${this.t(TEXTS.labelPhone)}</label>
-                        <div class="phone-wrap">
-                            <span class="phone-prefix">🇪🇸 +34</span>
-                            <input class="contact-input" type="tel" id="c-phone_mobile" placeholder="${this.t(TEXTS.phPhone)}" autocomplete="tel">
-                        </div>
+                        <input class="contact-input" type="tel" id="c-phone_mobile" placeholder="${this.t(TEXTS.phPhone)}" autocomplete="tel">
                         <span class="field-error">${this.t(TEXTS.errPhone)}</span>
                     </div>
                 </div>
@@ -811,6 +823,9 @@ const Quiz = {
         }
 
         this.current = index;
+        if (this._historyReady && !this._fromHistory) {
+            history.pushState({ quizSlide: index }, '');
+        }
 
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
@@ -822,8 +837,10 @@ const Quiz = {
                 if (slider) this.onSliderInput(step.id, slider);
                 const stageSlider = incoming.querySelector('.stage-slider');
                 if (stageSlider) this.onStageInput(step.id, stageSlider);
-                if (step.type === 'swipe-stack') this.initSwipe(step.id);
-                if (step.type === 'rank')        this.initRank(step.id);
+                if (step.type === 'swipe-stack')   this.initSwipe(step.id);
+                if (step.type === 'rank')          this.initRank(step.id);
+                if (step.type === 'contact')        this.initPhoneField('c-phone_mobile');
+                if (step.type === 'contact-simple') this.initPhoneField(`cs-phone-${step.id}`);
                 // Re-evaluate nav state now that .active is set and selections
                 // are visible — queries like .slide.active .photo-option.selected
                 // only work after this point.
@@ -1123,7 +1140,8 @@ const Quiz = {
         this.answers.first_name   = f.first_name.value.trim();
         this.answers.last_name    = f.last_name.value.trim();
         this.answers.email1       = f.email1.value.trim();
-        this.answers.phone_mobile = '+34 ' + f.phone_mobile.value.trim();
+        const itiPhone = this._iti?.['c-phone_mobile'];
+        this.answers.phone_mobile = itiPhone ? itiPhone.getNumber() : ('+34 ' + f.phone_mobile.value.trim());
         this.answers.lang         = this.lang;
 
         submitToCRM(this.answers);
@@ -1154,10 +1172,25 @@ const Quiz = {
 
         errEl.classList.remove('visible');
         this.answers.email1       = emailEl.value.trim();
-        this.answers.phone_mobile = phoneEl.value.trim();
+        const itiPhone = this._iti?.[`cs-phone-${stepId}`];
+        this.answers.phone_mobile = itiPhone ? itiPhone.getNumber() : phoneEl.value.trim();
         this.answers.lang         = this.lang;
 
         submitToCRM(this.answers);
+    },
+
+    initPhoneField(inputId) {
+        if (!window.intlTelInput) return;
+        const input = document.getElementById(inputId);
+        if (!input) return;
+        if (!this._iti) this._iti = {};
+        if (this._iti[inputId]) this._iti[inputId].destroy();
+        this._iti[inputId] = window.intlTelInput(input, {
+            initialCountry: 'es',
+            preferredCountries: ['es', 'fr', 'pt', 'gb', 'de', 'it'],
+            dropdownContainer: document.body,
+            utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@24/build/js/utils.js',
+        });
     },
 
     // ── Template variable system ──────────────────────────────

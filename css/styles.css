@@ -807,16 +807,40 @@ body::before {
     gap: 10px;
 }
 
-.phone-prefix {
+.phone-wrap .contact-input { flex: 1; min-width: 0; }
+
+/* ─── intl-tel-input overrides ───────────────────────────────── */
+.iti { width: 100%; }
+
+/* Dropdown rendered in <body> via dropdownContainer — needs high z-index */
+.iti--container { z-index: 1000; }
+
+/* Underline style matching quiz inputs */
+.iti__selected-flag {
+    background: transparent !important;
+    border-radius: 0;
+    padding: 0 6px 0 0;
+}
+.iti__flag-container:hover .iti__selected-flag,
+.iti__selected-flag:focus { background: transparent !important; }
+
+/* Dropdown */
+.iti__dropdown-content {
+    border-radius: 10px;
+    border: 1px solid var(--dark-15);
+    box-shadow: 0 8px 24px rgba(48, 43, 41, 0.12);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+}
+.iti__search-input {
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 300;
-    color: var(--dark-70);
-    padding-bottom: 10px;
-    white-space: nowrap;
-    flex-shrink: 0;
+    border-bottom: 1px solid var(--dark-15) !important;
+    padding: 8px 12px;
 }
-
-.phone-wrap .contact-input { flex: 1; }
+.iti__country.iti__highlight { background: var(--dark-08); }
+.iti__country:hover           { background: var(--dark-08); }
 
 /* ─── Slide error message ────────────────────────────────────── */
 .slide-error {
