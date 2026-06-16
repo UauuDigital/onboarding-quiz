@@ -11,7 +11,7 @@ function showThankYou() {
     if (msgEl) msgEl.textContent = msgs[lang] || msgs.ca;
     if (overlay) requestAnimationFrame(() => overlay.classList.add('visible'));
 
-    history.pushState({}, '', '/gracies');
+    history.pushState({}, '', '/gracies-quiz');
     if (typeof fbq === 'function') fbq('track', 'Lead');
 }
 
