@@ -10,6 +10,9 @@ function showThankYou() {
     const msgEl   = document.getElementById('thankyou-msg');
     if (msgEl) msgEl.textContent = msgs[lang] || msgs.ca;
     if (overlay) requestAnimationFrame(() => overlay.classList.add('visible'));
+
+    history.pushState({}, '', '/gracies');
+    if (typeof fbq === 'function') fbq('track', 'Lead');
 }
 
 // ─── reCAPTCHA callback ───────────────────────────────────────
