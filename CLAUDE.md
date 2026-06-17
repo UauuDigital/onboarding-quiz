@@ -58,7 +58,11 @@ Usar `{{partner1}}` i `{{partner2}}` a `question` o `subtitle` per inserir els n
 - Browser back/forward interceptat via History API → navega entre slides, no surt de la pàgina
 
 ## Qualificació de leads (isQualified)
-Un lead és "positiu" si `management === 'all-in-one'` i `guests >= 80`. En cas contrari va a `contact-negative`.
+Un lead és "negatiu" (va a `contact-negative`) si es compleix **qualsevol** d'aquestes condicions:
+- `guests < 30` — no fem casaments per sota de ~35 convidats i deixem 5 de marge.
+- `management === 'separate'` — vol gestionar els proveïdors pel seu compte.
+
+En qualsevol altre cas és "positiu".
 
 ## Integració CRM
 - **URL:** `https://crm.espaigastronomia.cat/index.php?entryPoint=WebToPersonCapture`

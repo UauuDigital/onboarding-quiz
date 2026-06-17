@@ -48,10 +48,17 @@ const TEXTS = {
 
 const STEPS = [
     {
+        id: 'cover',
+        type: 'cover',
+        kicker: { ca: 'Feu match amb UAUU?\nDescobriu la nostra proposta.', es: '¿Hacéis match con UAUU?\nDescubrid nuestra propuesta.', en: 'Do you match with UAUU?\nDiscover our proposal.' },
+        btnLabel: { ca: 'Som-hi!', es: '¡Vamos!', en: "Let's go!" },
+    },
+
+    {
         id: 'couple-names',
         type: 'couple-names',
         question: { ca: 'Abans de res, com ens dirigim a vosaltres?', es: 'Antes de nada, ¿cómo nos dirigimos a vosotros?', en: 'First of all, what are your names?' },
-        btnLabel: { ca: 'Comencem', es: 'Empecemos', en: "Let's start" },
+        btnLabel: { ca: 'Continuar', es: 'Continuar', en: 'Continue' },
     },
 
     {
@@ -306,6 +313,7 @@ const Quiz = {
         div.setAttribute('role', 'region');
 
         switch (step.type) {
+            case 'cover':         div.innerHTML = this.tplCover(step);               break;
             case 'couple-names':  div.innerHTML = this.tplCoupleNames(step, index);  break;
             case 'photo-choice':  div.innerHTML = this.tplPhotoChoice(step, index);  break;
             case 'slider':        div.innerHTML = this.tplSlider(step, index);        break;
@@ -328,6 +336,20 @@ const Quiz = {
     },
 
     // ── Templates ─────────────────────────────────────────────
+
+    tplCover(step) {
+        const kicker = this.t(step.kicker).replace(/\n/g, '<br>');
+        return `
+            <div class="cover-frame">
+                <img class="cover-bg" src="https://uauu.cat/media/onboarding/festiu.webp" alt="">
+                <div class="cover-overlay"></div>
+                <div class="cover-content">
+                    <h1 class="cover-kicker">${kicker}</h1>
+                    <button class="btn-cover" onclick="Quiz.goNext()">${this.t(step.btnLabel)}</button>
+                </div>
+            </div>
+        `;
+    },
 
     tplCoupleNames(step, index) {
         return `
@@ -768,6 +790,7 @@ const Quiz = {
     // ── Navigation ────────────────────────────────────────────
 
     isQualified() {
+        // No fem casaments per sota de ~35 convidats; deixem 5 de marge.
         const guests = parseInt(this.answers.guests) || 0;
         if (guests > 0 && guests < 30) return false;
         if (this.answers.management === 'separate') return false;
@@ -1093,7 +1116,7 @@ const Quiz = {
     handleKey(e) {
         if (e.key !== 'Enter' || document.activeElement.tagName === 'TEXTAREA') return;
         const step = STEPS[this.current];
-        const types = ['multi-choice', 'text', 'number', 'date', 'couple-names', 'slider'];
+        const types = ['multi-choice', 'text', 'number', 'date', 'couple-names', 'slider', 'cover'];
         if (types.includes(step.type)) this.goNext();
     },
 
@@ -1362,7 +1385,6 @@ const Quiz = {
         stack.addEventListener('pointermove', (e) => {
             if (!active) return;
             const dx = e.clientX - sx;
-            const dy = (e.clientY - (e.clientY)) * 0;
             active.style.transform = `translateX(${dx}px) rotate(${dx * 0.07}deg)`;
             active.querySelector('.swipe-like').classList.toggle('visible', dx > 50);
             active.querySelector('.swipe-nope').classList.toggle('visible', dx < -50);
@@ -1559,6 +1581,9 @@ const Quiz = {
     // ── Utils ─────────────────────────────────────────────────
 
     updateProgress() {
+        const isCover = STEPS[this.current].type === 'cover';
+        this.progressBar.style.opacity = isCover ? '0' : '';
+        if (isCover) return;
         const total = STEPS.length - 1;
         const pct   = total > 0 ? (this.current / total) * 100 : 0;
         this.progressBar.style.width = pct + '%';
@@ -1622,16 +1647,17 @@ const Quiz = {
     },
 
     updateNavBtns() {
-        // Back: blocked only on the very first question.
+        const isCover = STEPS[this.current].type === 'cover';
+        // On the cover the whole footer collapses (CSS), so the photo fills
+        // the screen edge-to-edge — no empty band where the arrows would be.
+        document.getElementById('quiz-app').classList.toggle('on-cover', isCover);
         this.btnUp.disabled   = this.current === 0;
-        // Forward: blocked until the current question is validly answered
-        // (and always on terminal screens — canAdvance handles both).
         this.btnDown.disabled = !this.canAdvance();
     },
 
     questionIndex(stepIndex) {
         return STEPS.slice(0, stepIndex + 1).filter(
-            s => s.type !== 'contact'
+            s => s.type !== 'contact' && s.type !== 'cover'
         ).length;
     },
 };

@@ -224,6 +224,93 @@ body::before {
     letter-spacing: 0.01em;
 }
 
+/* ─── Cover slide (portada) ──────────────────────────────────── */
+.slide-cover {
+    padding: 0;
+}
+
+/* On the cover slide the footer collapses so the photo fills the screen */
+#quiz-app.on-cover .quiz-footer { display: none; }
+
+.cover-frame {
+    position: relative;
+    width: min(728px, 90vw, calc(100vh - 180px));
+    aspect-ratio: 1;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 8px 48px rgba(48, 43, 41, 0.22);
+}
+
+.cover-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(14px);
+    transform: scale(1.07);
+}
+
+.cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(48, 43, 41, 0.52);
+}
+
+.cover-content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(24px, 6%, 52px);
+    text-align: center;
+    gap: clamp(22px, 4vh, 40px);
+}
+
+.cover-kicker {
+    margin: 0;
+    font-family: 'Ogg', Georgia, 'Times New Roman', serif;
+    font-size: clamp(22px, 4.8vw, 38px);
+    font-weight: 500;
+    line-height: 1.2;
+    color: #ffffff;
+}
+
+.btn-cover {
+    display: inline-flex;
+    align-items: center;
+    padding: 16px 44px;
+    background: #ffffff;
+    color: var(--dark);
+    border: none;
+    border-radius: 50px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: opacity 0.18s, transform 0.18s;
+    white-space: nowrap;
+}
+
+.btn-cover:hover  { opacity: 0.88; transform: translateY(-1px); }
+.btn-cover:active { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 640px) {
+    .cover-frame {
+        width: 100%;
+        height: 100%;
+        align-self: stretch;
+        border-radius: 18px;
+        box-shadow: none;
+        aspect-ratio: unset;
+    }
+    .cover-kicker { font-size: clamp(20px, 5.5vw, 26px); }
+}
+
 /* ─── Photo-choice slide ─────────────────────────────────────── */
 .slide-photo-choice {
     align-items: stretch;
